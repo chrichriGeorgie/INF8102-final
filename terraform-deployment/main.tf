@@ -1,207 +1,142 @@
-# inspired by https://learn.microsoft.com/en-us/azure/developer/terraform/create-vm-scaleset-network-disks-hcl
+provider "aws" {
+  region = "ca-central-1"  # Set your desired AWS region
+}
 
-terraform {
-  required_version = ">=0.12"
-  
-  required_providers {
-    azurerm = {
-      source = "hashicorp/azurerm"
-      version = "~>2.0"
+resource "aws_launch_configuration" "example" {
+  name = "example_config"
+  image_id = "ami-12345678"  # Specify the AMI ID of your VM image
+  instance_type = "t2.micro"  # Specify the instance type
+
+  user_data = <<-EOF
+              #!/bin/bash
+              echo "Hello from the user data script!" > /tmp/user_data_output.txt
+              # Add your custom script here or provide a script file URL
+              EOF
+}
+
+resource "aws_autoscaling_group" "example" {
+  desired_capacity     = 2
+  max_size             = 4
+  min_size             = 1
+  launch_configuration = aws_launch_configuration.example.id
+
+  tag {
+    key                 = "Name"
+    value               = "example-instance"
+    propagate_at_launch = true
+  }
+
+  health_check_type          = "EC2"
+  health_check_grace_period  = 300
+}
+
+resource "aws_lb" "external" {
+  name               = "external-lb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = ["sg-0123456789abcdef0"]  # Specify your security group IDs
+  subnets            = ["subnet-0123456789abcdef0", "subnet-0123456789abcdef1"]  # Specify your subnet IDs
+}
+
+resource "aws_lb" "internal" {
+  name               = "internal-lb"
+  internal           = true
+  load_balancer_type = "application"
+  security_groups    = ["sg-0123456789abcdef1"]  # Specify your security group IDs
+  subnets            = ["subnet-0123456789abcdef2", "subnet-0123456789abcdef3"]  # Specify your subnet IDs
+}
+
+resource "aws_lb_listener" "external" {
+  load_balancer_arn = aws_lb.external.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    target_group_arn = aws_lb_target_group.external.arn
+    type             = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "OK"
+      status_code  = "200"
     }
   }
 }
 
-provider "azurerm" {
-  features {}
+resource "aws_lb_listener" "internal" {
+  load_balancer_arn = aws_lb.internal.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    target_group_arn = aws_lb_target_group.internal.arn
+    type             = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "OK"
+      status_code  = "200"
+    }
+  }
 }
 
-resource "azurerm_resource_group" "vmss" {
- name     = var.resource_group_name
- location = var.location
- tags     = var.tags
+resource "aws_lb_target_group" "external" {
+  name     = "external-tg"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = "vpc-0123456789abcdef0"  # Specify your VPC ID
 }
 
-resource "random_string" "fqdn" {
- length  = 6
- special = false
- upper   = false
- numeric = false
+resource "aws_lb_target_group" "internal" {
+  name     = "internal-tg"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = "vpc-0123456789abcdef0"  # Specify your VPC ID
 }
 
-resource "azurerm_virtual_network" "vmss" {
- name                = "vmss-vnet"
- address_space       = ["10.0.0.0/16"]
- location            = var.location
- resource_group_name = azurerm_resource_group.vmss.name
- tags                = var.tags
+resource "aws_lb_target_group_attachment" "external" {
+  target_group_arn = aws_lb_target_group.external.arn
+  target_id        = aws_autoscaling_group.example.id
+  port             = 80
 }
 
-resource "azurerm_subnet" "vmss" {
- name                 = "vmss-subnet"
- resource_group_name  = azurerm_resource_group.vmss.name
- virtual_network_name = azurerm_virtual_network.vmss.name
- address_prefixes       = ["10.0.2.0/24"]
+resource "aws_lb_target_group_attachment" "internal" {
+  target_group_arn = aws_lb_target_group.internal.arn
+  target_id        = aws_autoscaling_group.example.id
+  port             = 80
 }
 
-resource "azurerm_public_ip" "vmss" {
- name                         = "vmss-public-ip"
- location                     = var.location
- resource_group_name          = azurerm_resource_group.vmss.name
- allocation_method            = "Static"
- domain_name_label            = random_string.fqdn.result
- tags                         = var.tags
+# Adding GuardDuty
+resource "aws_guardduty_detector" "example" {
+  enable = true
 }
 
-resource "azurerm_lb" "vmss" {
- name                = "vmss-lb"
- location            = var.location
- resource_group_name = azurerm_resource_group.vmss.name
+# Adding CloudWatch Alarms (Example: CPU Utilization Alarm)
+resource "aws_cloudwatch_metric_alarm" "example" {
+  alarm_name          = "example-cpu-utilization-alarm"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 2
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/EC2"
+  period              = 300
+  statistic           = "Average"
+  threshold           = 80
+  alarm_description   = "Alarm when CPU exceeds 80%"
 
- frontend_ip_configuration {
-   name                 = "PublicIPAddress"
-   public_ip_address_id = azurerm_public_ip.vmss.id
- }
+  dimensions = {
+    AutoScalingGroupName = aws_autoscaling_group.example.name
+  }
 
- tags = var.tags
+  alarm_actions = [
+    aws_autoscaling_policy.example.arn,
+  ]
 }
-
-resource "azurerm_lb_backend_address_pool" "bpepool" {
- loadbalancer_id     = azurerm_lb.vmss.id
- name                = "BackEndAddressPool"
-}
-
-resource "azurerm_lb_probe" "vmss" {
- resource_group_name = azurerm_resource_group.vmss.name
- loadbalancer_id     = azurerm_lb.vmss.id
- name                = "ssh-running-probe"
- port                = var.application_port
-}
-
-resource "azurerm_lb_rule" "lbnatrule" {
-   resource_group_name            = azurerm_resource_group.vmss.name
-   loadbalancer_id                = azurerm_lb.vmss.id
-   name                           = "http"
-   protocol                       = "Tcp"
-   frontend_port                  = var.application_port
-   backend_port                   = var.application_port
-   backend_address_pool_id        = azurerm_lb_backend_address_pool.bpepool.id
-   frontend_ip_configuration_name = "PublicIPAddress"
-   probe_id                       = azurerm_lb_probe.vmss.id
-}
-
-resource "azurerm_virtual_machine_scale_set" "vmss" {
- name                = "vmscaleset"
- location            = var.location
- resource_group_name = azurerm_resource_group.vmss.name
- upgrade_policy_mode = "Manual"
-
- sku {
-   name     = "Standard_DS1_v2"
-   tier     = "Standard"
-   capacity = 2
- }
-
- storage_profile_image_reference {
-   publisher = "Canonical"
-   offer     = "UbuntuServer"
-   sku       = "22.04-LTS"
-   version   = "latest"
- }
-
- storage_profile_os_disk {
-   name              = ""
-   caching           = "ReadWrite"
-   create_option     = "FromImage"
-   managed_disk_type = "Standard_LRS"
- }
-
- storage_profile_data_disk {
-   lun          = 0
-   caching        = "ReadWrite"
-   create_option  = "Empty"
-   disk_size_gb   = 10
- }
-
- os_profile {
-   computer_name_prefix = "vmlab"
-   admin_username       = var.admin_user
-   admin_password       = var.admin_password
-   custom_data          = file("web.conf")
- }
-
- os_profile_linux_config {
-   disable_password_authentication = false
- }
-
- network_profile {
-   name    = "terraformnetworkprofile"
-   primary = true
-
-   ip_configuration {
-     name                                   = "IPConfiguration"
-     subnet_id                              = azurerm_subnet.vmss.id
-     load_balancer_backend_address_pool_ids = [azurerm_lb_backend_address_pool.bpepool.id]
-     primary = true
-   }
- }
-
- tags = var.tags
-}
-
-resource "azurerm_public_ip" "jumpbox" {
- name                         = "jumpbox-public-ip"
- location                     = var.location
- resource_group_name          = azurerm_resource_group.vmss.name
- allocation_method            = "Static"
- domain_name_label            = "${random_string.fqdn.result}-ssh"
- tags                         = var.tags
-}
-
-resource "azurerm_network_interface" "jumpbox" {
- name                = "jumpbox-nic"
- location            = var.location
- resource_group_name = azurerm_resource_group.vmss.name
-
- ip_configuration {
-   name                          = "IPConfiguration"
-   subnet_id                     = azurerm_subnet.vmss.id
-   private_ip_address_allocation = "dynamic"
-   public_ip_address_id          = azurerm_public_ip.jumpbox.id
- }
-
- tags = var.tags
-}
-
-resource "azurerm_virtual_machine" "jumpbox" {
- name                  = "jumpbox"
- location              = var.location
- resource_group_name   = azurerm_resource_group.vmss.name
- network_interface_ids = [azurerm_network_interface.jumpbox.id]
- vm_size               = "Standard_DS1_v2"
-
- storage_image_reference {
-   publisher = "Canonical"
-   offer     = "UbuntuServer"
-   sku       = "16.04-LTS"
-   version   = "latest"
- }
-
- storage_os_disk {
-   name              = "jumpbox-osdisk"
-   caching           = "ReadWrite"
-   create_option     = "FromImage"
-   managed_disk_type = "Standard_LRS"
- }
-
- os_profile {
-   computer_name  = "jumpbox"
-   admin_username = var.admin_user
-   admin_password = var.admin_password
- }
-
- os_profile_linux_config {
-   disable_password_authentication = false
- }
-
- tags = var.tags
-}
+//resource "aws_autoscaling_policy" "example" {
+//  name                   = "scale-up"
+//  scaling_adjustment    = 1
+//  cooldown              = 300
+// adjustment_type       = "ChangeInCapacity"
+//  cooldown_evaluation_periods = 2
+//  scaling_adjustment_type     = "ChangeInCapacity"
+//  scaling_target_id   = aws_autoscaling_policy.example.id
+//}
