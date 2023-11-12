@@ -3,7 +3,7 @@ import socketserver
 from pymongo import MongoClient
 import requests  # Import the requests library
 
-uri = "mongodb+srv://celinagmunoz:inf8102tpfinal@inf8102.tn5wek3.mongodb.net/?retryWrites=true&w=majority"
+uri = "mongodb+srv://celgmunoz:inf8102tpfinal@inf8102.s70frw8.mongodb.net/?retryWrites=true&w=majority"
 client = MongoClient(uri)
 
 # Access a specific database and collection
