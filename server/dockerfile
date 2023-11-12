@@ -1,0 +1,17 @@
+# Use an official Python runtime as a parent image
+FROM python:latest
+
+# Set the working directory to /app
+WORKDIR /app
+
+# Copy the current directory contents into the container at /app
+COPY . /app
+
+# Install any dependencies your Python application needs
+RUN pip install pymongo requests
+
+# Expose the port your application runs on
+EXPOSE 8000
+
+# Command to run your application
+CMD ["python", "http_server.py"]
