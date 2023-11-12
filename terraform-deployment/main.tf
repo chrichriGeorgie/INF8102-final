@@ -25,7 +25,7 @@ resource "random_string" "fqdn" {
  length  = 6
  special = false
  upper   = false
- number  = false
+ numeric = false
 }
 
 resource "azurerm_virtual_network" "vmss" {
@@ -104,7 +104,7 @@ resource "azurerm_virtual_machine_scale_set" "vmss" {
  storage_profile_image_reference {
    publisher = "Canonical"
    offer     = "UbuntuServer"
-   sku       = "16.04-LTS"
+   sku       = "22.04-LTS"
    version   = "latest"
  }
 
