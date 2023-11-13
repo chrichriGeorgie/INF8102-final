@@ -10,12 +10,12 @@ resource "aws_launch_configuration" "commander_scaler_config" {
 }
 
 resource "aws_autoscaling_group" "commander_scaler_config_group" {
-  // These values are here for our project's demonstration purposes. In a real setting they could be augmented.
+  # These values are here for our project's demonstration purposes. In a real setting they could be augmented.
   desired_capacity     = 2
   max_size             = 4
   min_size             = 1
   launch_configuration = aws_launch_configuration.commander_scaler_config.id
-
+  target_group_arns = [aws_lb.c2_lb.arn]
 //  tag {
 //    key                 = "C"
 //    value               = "example-instance"
@@ -26,12 +26,11 @@ resource "aws_autoscaling_group" "commander_scaler_config_group" {
   health_check_grace_period  = 300
 }
 
-//resource "aws_autoscaling_policy" "example" {
-//  name                   = "scale-up"
-//  scaling_adjustment    = 1
-//  cooldown              = 300
-// adjustment_type       = "ChangeInCapacity"
-//  cooldown_evaluation_periods = 2
-//  scaling_adjustment_type     = "ChangeInCapacity"
-//  scaling_target_id   = aws_autoscaling_policy.example.id
-//}
+resource "aws_autoscaling_policy" "commander_scaler_policy" {
+  name = "c2-scale"
+  autoscaling_group_name = aws_autoscaling_group.commander_scaler_config_group.name
+  policy_type = "SimpleScaling"
+  adjustment_type = "ChangeInCapacity"
+  scaling_adjustment = 1
+  cooldown  = 300
+}
