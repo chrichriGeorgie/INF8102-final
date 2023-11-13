@@ -1,4 +1,11 @@
 variable "application_port" {
-   description = "Port that you want to expose to the external load balancer"
-   default     = 80
+   default     = 443
+}
+
+variable "docker_port" {
+   default     = 8000
+}
+
+variable "ssh_port" {
+  default = 22
 }
