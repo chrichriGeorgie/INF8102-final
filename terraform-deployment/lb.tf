@@ -1,18 +1,18 @@
 resource "aws_lb" "c2_lb" {
-  name               = "external-lb"
+  name               = "c2-lb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [""]  # Specify your security group IDs
-  subnets            = [""]  # Specify your subnet IDs
+  security_groups    = [aws_security_group.commander_sg.id]
+  subnets            = [aws_subnet.commander_subnet.id]
 }
 
-resource "aws_lb_listener" "c2_lb" {
-  load_balancer_arn = aws_lb.external.arn
-  port              = 80
-  protocol          = "HTTP"
+resource "aws_lb_listener" "c2_lb_listener" {
+  load_balancer_arn = aws_lb.c2_lb.arn
+  port              = var.application_port
+  protocol          = "HTTPS"
 
   default_action {
-    target_group_arn = aws_lb_target_group.external.arn
+    target_group_arn = aws_lb_target_group.c2_lb_tg.arn
     type             = "fixed-response"
 
     fixed_response {
@@ -23,16 +23,16 @@ resource "aws_lb_listener" "c2_lb" {
   }
 }
 
-resource "aws_lb_target_group" "c2_lb" {
-  name     = "external-tg"
-  port     = 80
-  protocol = "HTTP"
-  vpc_id   = "vpc-0123456789abcdef0"  # Specify your VPC ID
+resource "aws_lb_target_group" "c2_lb_tg" {
+  name = "c2-tg"
+  port = var.application_port
+  protocol = "HTTPS"
+  vpc_id = aws_vpc.vpc.id
 }
 
 
-resource "aws_lb_target_group_attachment" "c2_lb" {
-  target_group_arn = aws_lb_target_group.external.arn
-  target_id        = aws_autoscaling_group.c2_lb.id
-  port             = 80
+resource "aws_lb_target_group_attachment" "c2_lb_ga" {
+  target_group_arn = aws_lb_target_group.c2_lb_tg.arn
+  target_id        = aws_autoscaling_group.commander_scaler_config_group.id
+  port             = var.application_port
 }

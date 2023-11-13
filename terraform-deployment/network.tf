@@ -35,29 +35,3 @@ resource "aws_route_table_association" "commander_rt" {
   subnet_id      = aws_subnet.commander_subnet.id
   route_table_id = aws_route_table.public_rt.id
 }
-
-resource "aws_security_group" "commander_sg" {
-  name   = "Commander Security Group"
-  vpc_id = aws_vpc.vpc.id
-
-  ingress {
-    from_port   = var.application_port
-    to_port     = var.docker_port
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = var.ssh_port
-    to_port     = var.ssh_port
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = -1
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
