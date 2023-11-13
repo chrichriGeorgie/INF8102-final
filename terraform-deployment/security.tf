@@ -3,9 +3,9 @@ resource "aws_guardduty_detector" "c2_detector" {
   enable = true
 }
 
-# Adding CloudWatch Alarms (Example: CPU Utilization Alarm)
+# Adding CloudWatch Alarms
 resource "aws_cloudwatch_metric_alarm" "c2_alarm" {
-  alarm_name          = "example-cpu-utilization-alarm"
+  alarm_name          = "cpu-utilization-alarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 2
   metric_name         = "CPUUtilization"
@@ -16,11 +16,11 @@ resource "aws_cloudwatch_metric_alarm" "c2_alarm" {
   alarm_description   = "Alarm when CPU exceeds 80%"
 
   dimensions = {
-    AutoScalingGroupName = aws_autoscaling_group.example.name
+    AutoScalingGroupName = aws_autoscaling_group.commander_scaler_config_group.name
   }
 
   alarm_actions = [
-    aws_autoscaling_policy.example.arn,
+    aws_autoscaling_policy.commander_scaler_policy.arn,
   ]
 }
 
