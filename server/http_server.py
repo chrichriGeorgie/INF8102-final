@@ -1,14 +1,46 @@
 import http.server
 import socketserver
-from pymongo import MongoClient
-import requests  # Import the requests library
+import boto3
+import uuid
 
-uri = "mongodb+srv://celgmunoz:inf8102tpfinal@inf8102.s70frw8.mongodb.net/?retryWrites=true&w=majority"
-client = MongoClient(uri)
+dynamodb = boto3.resource('dynamodb')
+table_name = 'INF8102_TP_Final'
+partition_key = 'UserId'  
 
-# Access a specific database and collection
-db = client["INF8102"]
-collection = db["Tp final"]
+# Check if the table already exists, if not, create it
+existing_tables = dynamodb.meta.client.list_tables()['TableNames']
+if table_name not in existing_tables:
+    table = dynamodb.create_table(
+        TableName=table_name,
+        KeySchema=[
+            {
+                'AttributeName': partition_key,
+                'KeyType': 'HASH' 
+            },
+            {
+                'AttributeName': 'EntryID', 
+                'KeyType': 'RANGE' 
+            }
+        ],
+        AttributeDefinitions=[
+            {
+                'AttributeName': partition_key,
+                'AttributeType': 'S'  
+            },
+            {
+                'AttributeName': 'EntryID',
+                'AttributeType': 'S'
+            }
+        ],
+        ProvisionedThroughput={
+            'ReadCapacityUnits': 5,
+            'WriteCapacityUnits': 5
+        }
+    )
+
+    table.meta.client.get_waiter('table_exists').wait(TableName=table_name)
+else:
+    table = dynamodb.Table(table_name)
 
 PORT = 8000
 
@@ -16,14 +48,25 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length).decode('utf-8')
-        # Process the POST data as needed
+
         print("Received POST data:", post_data)
 
-        # Example: Insert the received data into MongoDB
-        data = {"received_data": post_data}
-        collection.insert_one(data)
+        try:
+            # Create a unique ID for each entry
+            entry_id = str(uuid.uuid4())
+            user_id = "user123"  
 
-        # Respond to the client
+            response = table.put_item(
+                Item={
+                    'UserId': user_id,  
+                    'EntryID': entry_id,  
+                    'Data': post_data
+                }
+            )
+            print("Data inserted into DynamoDB:", response)
+        except Exception as e:
+            print(f"Error inserting into DynamoDB: {e}")
+
         self.send_response(200)
         self.send_header('Content-type', 'text/plain')
         self.end_headers()
