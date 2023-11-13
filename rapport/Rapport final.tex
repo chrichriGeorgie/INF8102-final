@@ -65,7 +65,10 @@ Bonjour
 \section{Méthodologie}
 
 \subsection{Services infonuagiques et composants}
+Différents services AWS et composants associés ont été nécessaires afin de déployer l’infrastructure initiale qui a mené aux expérimentations de la section 5. D’abord, des instances EC2 en redondance dans un groupe de mise à l’échelle automatique ont été configurée. Ce type de service permet d’assurer la haute disponibilité et la réactivité du système en gérant le nombre d’instances EC2 disponibles à un moment spécifique, cela en se basant sur la demande. Il est possible de spécifier un minimum et un maximum d’instances autorisées. La technologie de répartiteur de charge d’application (ALB) a aussi été utilisée. Elle est automatiquement en redondance dans une région donnée et peut donc soutenir une charge de requêtes élevée, ce qui permet à nouveau d’ajouter à la disponibilité de l’application. Autrement, les groupes de sécurité sont également utilisés pour permettre de gérer le trafic permis en entrée et en sortie. L’ensemble des ressources partagent un sous-réseau géré par la fonctionnalité des \texit{subnets} de AWS.
 
+
+D’autres composants sont utilisés, notamment Amazon Guard Duty et Amazon Cloud Watch. Le premier est un service qui permet la surveillance et l’analyse de différents processus et composants de l’écosystème Amazon Web Services. Il peut notamment faire l’agrégation des journaux reçus de ces services et les corréler avec des flux en temps réel sur les données de menaces pour détecter des activités malveillantes potentielles et soulever des alertes à ce sujet. Quant à Amazon Cloud Watch, il s’agit plutôt d’une solution de journalisation et d’un tableau de bord qui permet de constater différentes métriques en lien avec l’infrastructure en un seul coup d’oeil.
 \subsection{Configuration de l'infrastructure}
 
 \subsection{Surveillance et journalisation}
