@@ -7,41 +7,6 @@ dynamodb = boto3.resource('dynamodb')
 table_name = 'INF8102_TP_Final'
 partition_key = 'UserId'  
 
-# Check if the table already exists, if not, create it
-existing_tables = dynamodb.meta.client.list_tables()['TableNames']
-if table_name not in existing_tables:
-    table = dynamodb.create_table(
-        TableName=table_name,
-        KeySchema=[
-            {
-                'AttributeName': partition_key,
-                'KeyType': 'HASH' 
-            },
-            {
-                'AttributeName': 'EntryID', 
-                'KeyType': 'RANGE' 
-            }
-        ],
-        AttributeDefinitions=[
-            {
-                'AttributeName': partition_key,
-                'AttributeType': 'S'  
-            },
-            {
-                'AttributeName': 'EntryID',
-                'AttributeType': 'S'
-            }
-        ],
-        ProvisionedThroughput={
-            'ReadCapacityUnits': 5,
-            'WriteCapacityUnits': 5
-        }
-    )
-
-    table.meta.client.get_waiter('table_exists').wait(TableName=table_name)
-else:
-    table = dynamodb.Table(table_name)
-
 PORT = 8000
 
 class MyHandler(http.server.SimpleHTTPRequestHandler):
