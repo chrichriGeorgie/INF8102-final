@@ -3,7 +3,7 @@ import socketserver
 import boto3
 import uuid
 
-dynamodb = boto3.resource('dynamodb')
+dynamodb = boto3.resource('dynamodb', region_name='us-west-1')
 table_name = 'INF8102_TP_Final'
 partition_key = 'UserId'  # Specify the partition key
 
@@ -56,7 +56,7 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
         try:
             # Create a unique ID for each entry
             entry_id = str(uuid.uuid4())
-            user_id = str(uuid.uuid4())     # Replace with the actual user ID from your data
+            user_id = str(uuid.uuid4())# Replace with the actual user ID from your data
 
             response = table.put_item(
                 Item={
