@@ -25,7 +25,18 @@ resource "aws_autoscaling_policy" "commander_scaler_policy" {
   policy_type = "SimpleScaling"
   adjustment_type = "ChangeInCapacity"
   scaling_adjustment = 1
-  cooldown  = 300
+  cooldown  = var.period
 }
 
-#Maybe deploy DB?
+resource "aws_dynamodb_table" "c2_db" {
+  name           = "CommanderDB"
+  hash_key       = "UserId"
+  billing_mode   = "PROVISIONED"
+  read_capacity  = 20
+  write_capacity = 20
+
+  attribute {
+    name = "UserId"
+    type = "S"
+  }
+}
