@@ -85,12 +85,21 @@ D’autres composants sont utilisés, notamment Amazon Guard Duty et Amazon Clou
 
 \section{Expérimentation}
 
-Défi: Azure Student subscription ne permet pas Terraform -> AWS
 
 \subsection{Test de pénétration de l'infrastructure}
+Pour faire des tests de pénétration sur l'infrastructure et mesurer sa résilience, plusieurs scénarios différents ont été pensés afin de simuler des attaques réelles. La section \ref{sec:reponse-incidents} décrira l'impact de ces tests sur l'infrastructure en fonction des métriques des solutions de surveillance en place. Effectuer de tels tests de pénétration sur l'infrastructure est essentiel dans une démarche d'assurance-qualité et de mesure de la résilience.
 
+\subsubsection{Reconnaissance par balayage de port}
+Un attaquant commencerait logiquement sa phase de recherche par une reconnaissance externe. Il s'agit de la première étape lorsque l'on suit les phases du test d'intrusion tel que décrites par le MITRE ATT\&CK framework. Un outil populaire pour établir ce type de reconnaissance est nmap, qui propose plusieurs autres fonctionnalités intéressantes. Une alternative est masscan, qui est de réputation plus bruyante lors de la tentative de détection de services ouverts sur une IP, par exemple.
+
+\subsubsection{Force brute de connexion SSH}
+Un attaquant pourrait tenter une attaque par force brute sur la connexion SSH ouverte. Ce scénario utilise généralement une liste de mots de passe connus pouvant provenir de différentes sources. Il est possible d'y référer comme étant un dictionnaire de mots de passe. Des outils spécialisés, tel que Hydra, permettent d'automatiser le processus et de tenter chaque combinaison de mot de passe avec un nom d'utilisateur prévisible tel que root.
+
+
+\subsubsection{Attaque par déni de service}
+Un attaquant voulant porter atteinte à la disponibilité du service ou encore se faire remarquer pourra utiliser des techniques de déni de service et de déni de service distribué. En respect des conditions d'utilisations et des termes d'utilisation acceptable des services AWS, il n'est pas possible de simuler une attaque de déni de service distribué sans passer par les partenaires de simulation approuvés.
 \subsection{Simulation de brèche de données}
-
+La simulation de brèche de données se fait en mode brèche assumée, ou \textit{assumed breach} en anglais.
 \subsection{Test de la détection des anomalies}
 \subsubsection{Modèle d'apprentissage machine pour la détection d'anomalies}
 \subsection{Évaluation de l'efficacité de la surveillance et de la journalisation}
@@ -99,7 +108,7 @@ Défi: Azure Student subscription ne permet pas Terraform -> AWS
 
 \subsection{Planification de la réponse aux incidents (IRP)}
 
-\subsection{Dectection et déclaration d'incident}
+\subsection{Détection et déclaration d'incident}
 \subsection{Analyse de l'incident}
 \subsubsection{Analyse des logs}
 \subsubsection{Analyse forensique}
@@ -117,6 +126,7 @@ Défi: Azure Student subscription ne permet pas Terraform -> AWS
 \subsection{Trouvailles clés}
 
 \subsection{Limitations}
+Défi: Azure Student subscription ne permet pas Terraform -> AWS
 redondance pas faite (implique dupliquer contenu terraform)
 \subsection{Déductions}
 
