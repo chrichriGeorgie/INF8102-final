@@ -2,7 +2,7 @@ resource "aws_launch_configuration" "commander_scaler_config" {
   name = "commander_scaler_config"
   image_id = "ami-0fc5d935ebf8bc3bc"  # Ubuntu 22.04 LTS x86_64
   instance_type = "t2.micro" # Limitation
-  
+
   user_data = templatefile("setup.sh.tftpl", {})
 }
 
@@ -13,6 +13,7 @@ resource "aws_autoscaling_group" "commander_scaler_config_group" {
   min_size             = 1
   launch_configuration = aws_launch_configuration.commander_scaler_config.id
   target_group_arns = [aws_lb.c2_lb.arn]
+  vpc_zone_identifier = [aws_subnet.commander_subnet.id]
 }
 
 resource "aws_autoscaling_policy" "commander_scaler_policy" {
@@ -25,14 +26,20 @@ resource "aws_autoscaling_policy" "commander_scaler_policy" {
 }
 
 resource "aws_dynamodb_table" "c2_db" {
-  name           = "CommanderDB"
+  name           = "INF8102_TP_Final"
   hash_key       = "UserId"
+  range_key = "EntryID"
   billing_mode   = "PROVISIONED"
-  read_capacity  = 20
-  write_capacity = 20
+  read_capacity  = 5
+  write_capacity = 5
 
   attribute {
     name = "UserId"
+    type = "S"
+  }
+
+  attribute {
+    name = "EntryID"
     type = "S"
   }
 }

@@ -10,5 +10,5 @@ terraform {
 }
 
 provider "aws" {
-  region = "ca-central-1"  # Canada Central Region Deployment
+  region = "us-east-1"  # US Region Deployment
 }

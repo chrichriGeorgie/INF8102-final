@@ -30,7 +30,7 @@ fi
 #Terraform deploying AWS Infrastructure
 terraform init
 terraform plan
-echo "Please verifiy the planned deployement."
+echo "Please verify the planned deployement."
 echo "Do you want to proceed with the deployment [Y/n]?"
 read deploy
 if [ -z "$deploy" ];
@@ -50,7 +50,7 @@ then
         clean="n"
     fi
 
-    if [ $choice = "y" ] || [ $choice = "Y" ];
+    if [ $clean = "y" ] || [ $clean = "Y" ];
     then
         terraform destroy
         echo "Clean up completed."
