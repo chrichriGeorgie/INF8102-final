@@ -1,0 +1,153 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{Résilience d'une Architecture Command and Control sur AWS
+}
+
+\author{\IEEEauthorblockN{Christophe St-Georges}
+\IEEEauthorblockA{\textit{Département de génie informatique et logiciel} \\
+\textit{Polytechnique Montréal}\\
+Montréal, Canada \\
+christophe.st-georges@polymtl.ca}
+\and
+\IEEEauthorblockN{Jimmy Bell}
+\IEEEauthorblockA{\textit{Département de génie informatique et logiciel} \\
+\textit{Polytechnique Montréal}\\
+Montréal, Canada \\
+jimmy.bell@polymtl.ca}
+\and
+\IEEEauthorblockN{Cédrick Gontran Nicolas}
+\IEEEauthorblockA{\textit{Département de génie informatique et logiciel} \\
+\textit{Polytechnique Montréal}\\
+Montréal, Canada \\
+cedrick.nicolas@polymtl.ca}
+\and
+\IEEEauthorblockN{Celina Ghoraieb-Munoz}
+\IEEEauthorblockA{\textit{Département de génie informatique et logiciel} \\
+\textit{Polytechnique Montréal}\\
+Montréal, Canada \\
+celina.ghoraieb-munoz@polymtl.ca}
+}
+
+
+\maketitle
+
+\begin{abstract}
+Depuis la nuit des temps, le cloud.Depuis la nuit des temps, le cloud.Depuis la nuit des temps, le cloud.Depuis la nuit des temps, le cloud.Depuis la nuit des temps, le cloud.Depuis la nuit des temps, le cloud.Depuis la nuit des temps, le cloud.Depuis la nuit des temps, le cloud.Depuis la nuit des temps, le cloud.Depuis la nuit des temps, le cloud.Depuis la nuit des temps, le cloud.Depuis la nuit des temps, le cloud.Depuis la nuit des temps, le cloud.Depuis la nuit des temps, le cloud.Depuis la nuit des temps, le cloud.
+\end{abstract}
+
+\begin{IEEEkeywords}
+nuage,
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+\subsection{Contexte}
+Bonjour
+\subsection{Énoncé du problème}
+
+\subsection{Planification de mesures de sécurité infonuagique}
+
+\subsection{Portée de l'étude}
+
+\section{État de l'art}
+Notre étude est plutôt novatrice et la littérature existante sur notre problématique spécifique est assez limitée. En ce sens, nous résumons plutôt des recherches existantes en lien avec des concepts qui seront utiles pour le développement d'une architecture C2 dans le nuage.
+
+
+Une compréhension solide du modèle d'infonuagique SPI est fournie par Hashizume et al. où l'on peut constater les différences entre le logiciel comme service (SaaS), la plateforme comme service (PaaS) et l'infrastructure comme service (IaaS). Ces trois variantes sont présentées d'un point de vue de la cybersécurité pour comprendre les conséquences d'utiliser un modèle plutôt qu'un autre. On y apprend entre autre que les problèmes de sécurité des variantes d'infonuagique qui sont plus hautes dans la hiérarchie SPI vont porter les vulnérabilités des variantes plus basses. Particulièrement, une attention doit être portée à la sécurité des réseaux virtuels et des groupes de sécurité afin de s'assurer que ceux-ci sont configurés correctement. Cela sert à éviter une infiltration potentielle en abusant de permissions mal configurées.
+
+
+Le point de vue des équipes qui travaillent en \textit{Red Teaming} chez Microsoft est présenté par un papier de Smith, Theisen et Barik. Ce point de vue est central pour notre projet, car il permet de comprendre les raisons qui poussent au besoin de développer une infrastructure C2 dans un contexte professionnel. On y apprend que les ingénieurs en sécurité offensive travaillent principalement sur des mandats internes de longue haleine, ce qui peut se traduire dans notre projet par la nécessité d'avoir des infrastructures résilientes et durables temporellement. On comprend aussi que les professionnels de la cybersécurité sont amenés à développer des outils personnalisés pour réussir leurs tâches de cyberattaques, et que les infrastructures d'une équipe de \textit{Red Teaming} doivent permettre une protection contre ce type de script.
+
+
+Un amalgame des informations et technologies disponibles en lien avec les répartisseurs de charge \textit{load balancers} est effectuée via un résumé de Afzal et Kavitha. Cette taxonomie détaillée et complète permet d'avoir une compréhension globale du sujet pour évaluer les mesures qui s'offrent à nous dans notre projet et comprendre le type de répartisseurs de charge qu'offre Amazon Web Services.\section{Méthodologie}
+
+\subsection{Services infonuagiques et composants}
+Différents services AWS et composants associés ont été nécessaires afin de déployer l’infrastructure initiale qui a mené aux expérimentations de la section 5. D’abord, des instances EC2 en redondance dans un groupe de mise à l’échelle automatique ont été configurée. Ce type de service permet d’assurer la haute disponibilité et la réactivité du système en gérant le nombre d’instances EC2 disponibles à un moment spécifique, cela en se basant sur la demande. Il est possible de spécifier un minimum et un maximum d’instances autorisées. La technologie de répartiteur de charge d’application (ALB) a aussi été utilisée. Elle est automatiquement en redondance dans une région donnée et peut donc soutenir une charge de requêtes élevée, ce qui permet à nouveau d’ajouter à la disponibilité de l’application. Autrement, les groupes de sécurité sont également utilisés pour permettre de gérer le trafic permis en entrée et en sortie. L’ensemble des ressources partagent un sous-réseau géré par la fonctionnalité des \texit{subnets} de AWS.
+
+
+D’autres composants sont utilisés, notamment Amazon Guard Duty et Amazon Cloud Watch. Le premier est un service qui permet la surveillance et l’analyse de différents processus et composants de l’écosystème Amazon Web Services. Il peut notamment faire l’agrégation des journaux reçus de ces services et les corréler avec des flux en temps réel sur les données de menaces pour détecter des activités malveillantes potentielles et soulever des alertes à ce sujet. Quant à Amazon Cloud Watch, il s’agit plutôt d’une solution de journalisation et d’un tableau de bord qui permet de constater différentes métriques en lien avec l’infrastructure en un seul coup d’oeil.
+\subsection{Configuration de l'infrastructure}
+
+\subsection{Surveillance et journalisation}
+
+\subsection{Détection des anomalies}
+
+\section{Expérimentation}
+
+
+\subsection{Test de pénétration de l'infrastructure}
+Pour faire des tests de pénétration sur l'infrastructure et mesurer sa résilience, plusieurs scénarios différents ont été pensés afin de simuler des attaques réelles. La section \ref{sec:reponse-incidents} décrira l'impact de ces tests sur l'infrastructure en fonction des métriques des solutions de surveillance en place. Effectuer de tels tests de pénétration sur l'infrastructure est essentiel dans une démarche d'assurance-qualité et de mesure de la résilience.
+
+\subsubsection{Reconnaissance par balayage de port}
+Un attaquant commencerait logiquement sa phase de recherche par une reconnaissance externe. Il s'agit de la première étape lorsque l'on suit les phases du test d'intrusion tel que décrites par le MITRE ATT\&CK framework. Un outil populaire pour établir ce type de reconnaissance est nmap, qui propose plusieurs autres fonctionnalités intéressantes. Une alternative est masscan, qui est de réputation plus bruyante lors de la tentative de détection de services ouverts sur une IP, par exemple.
+
+\subsubsection{Force brute de connexion SSH}
+Un attaquant pourrait tenter une attaque par force brute sur la connexion SSH ouverte. Ce scénario utilise généralement une liste de mots de passe connus pouvant provenir de différentes sources. Il est possible d'y référer comme étant un dictionnaire de mots de passe. Des outils spécialisés, tel que Hydra, permettent d'automatiser le processus et de tenter chaque combinaison de mot de passe avec un nom d'utilisateur prévisible tel que root.
+
+
+\subsubsection{Attaque par déni de service}
+Un attaquant voulant porter atteinte à la disponibilité du service ou encore se faire remarquer pourra utiliser des techniques de déni de service et de déni de service distribué. En respect des conditions d'utilisations et des termes d'utilisation acceptable des services AWS, il n'est pas possible de simuler une attaque de déni de service distribué sans passer par les partenaires de simulation approuvés.
+\subsection{Simulation de brèche de données}
+La simulation de brèche de données se fait en mode brèche assumée, ou \textit{assumed breach} en anglais.
+\subsection{Test de la détection des anomalies}
+\subsubsection{Modèle d'apprentissage machine pour la détection d'anomalies}
+\subsection{Évaluation de l'efficacité de la surveillance et de la journalisation}
+
+\section{Réponse aux incidents}
+
+\subsection{Planification de la réponse aux incidents (IRP)}
+
+\subsection{Détection et déclaration d'incident}
+\subsection{Analyse de l'incident}
+\subsubsection{Analyse des logs}
+\subsubsection{Analyse forensique}
+\subsubsection{Analyse de la cause à la racine (RCA)}
+\subsubsection{RCA vs. Analyse forensique en sécurité infonuagique}
+\subsection{Confinement, éradication et récupération}
+
+\subsection{Post-Mortem}
+\subsubsection{Communication}
+\subsubsection{Durcissement post-incident}
+\subsubsection{Défis}
+
+\section{Discussion}
+
+\subsection{Trouvailles clés}
+
+\subsection{Limitations}
+Défi: Azure Student subscription ne permet pas Terraform -> AWS
+redondance pas faite (implique dupliquer contenu terraform)
+\subsection{Déductions}
+
+\section{Conclusion et travaux futurs}
+
+\subsection{Retour}
+
+\subsection{Recommandations}
+
+\subsection{Directions futures}
+
+\section{Crédits et remerciements}
+
+\begin{thebibliography}{00}
+\bibitem{b1} G. Eason, B. Noble, and I. N. Sneddon, ``On certain integrals of Lipschitz-Hankel type involving products of Bessel functions,'' Phil. Trans. Roy. Soc. London, vol. A247, pp. 529--551, April 1955.
+\bibitem{b2} J. Clerk Maxwell, A Treatise on Electricity and Magnetism, 3rd ed., vol. 2. Oxford: Clarendon, 1892, pp.68--73.
+\bibitem{b3} I. S. Jacobs and C. P. Bean, ``Fine particles, thin films and exchange anisotropy,'' in Magnetism, vol. III, G. T. Rado and H. Suhl, Eds. New York: Academic, 1963, pp. 271--350.
+\bibitem{b4} K. Elissa, ``Title of paper if known,'' unpublished.
+\bibitem{b5} R. Nicole, ``Title of paper with only first word capitalized,'' J. Name Stand. Abbrev., in press.
+\bibitem{b6} Y. Yorozu, M. Hirano, K. Oka, and Y. Tagawa, ``Electron spectroscopy studies on magneto-optical media and plastic substrate interface,'' IEEE Transl. J. Magn. Japan, vol. 2, pp. 740--741, August 1987 [Digests 9th Annual Conf. Magnetics Japan, p. 301, 1982].
+\bibitem{b7} M. Young, The Technical Writer's Handbook. Mill Valley, CA: University Science, 1989.
+\end{thebibliography}
+
+\end{document}
