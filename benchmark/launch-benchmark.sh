@@ -50,3 +50,20 @@ if [[ "$response" =~ ^[Yy]$ ]]; then
     fi
 
 fi
+
+echo "Please specify IPv4 address to test (XXX.XXX.XXX.XXX)"
+read -r ip
+
+# Nmap
+echo "Running nmap for Reconnaissance"
+sudo nmap -sV -O $ip -Pn > nmap.txt
+echo "Results:"
+cat nmap.txt
+
+# Masscan
+echo "Running masscan for Reconnaissance"
+sudo masscan -p 1-1000 $ip --banner --output-format json -oX masscan.json
+
+
+
+exit 0

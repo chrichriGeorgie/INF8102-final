@@ -1,6 +1,9 @@
 # Local .terraform directories
 **/.terraform/*
 
+# Added github dependencies
+benchmark/Stress-tester/
+
 # .tfstate files
 *.tfstate
 *.tfstate.*
