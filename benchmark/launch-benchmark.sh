@@ -78,7 +78,7 @@ if [[ "$response" =~ ^[Yy]$ ]]; then
     if [ $exit_status -eq 0 ]; then
         echo "Command executed successfully."
     else
-        exit 1
+        echo "[Problem with hydra] Continuing."
     fi
 else
     echo "Cannot continue. Goodbye."
@@ -86,6 +86,24 @@ else
 fi
 
 echo "This next attack is not mandatory. It is a simulation of denial of service."
+echo "If you understand the implications, do you want to proceed? [y/N]"
+read -r response
 
+if [[ "$response" =~ ^[Yy]$ ]]; then
+    echo "You chose to continue. Using Stress-tester."
+    echo "Specify the tcp port to test"
+    read -r port
+    go build Stress-tester/stress.go 
+    ./Stress-tester/stress $ip $port 1 1000 30 5
+    exit_status=$?
 
+    if [ $exit_status -eq 0 ]; then
+        echo "Command executed successfully."
+    else
+        echo "Command failed with exit status $exit_status."
+    fi
+
+fi
+
+echo "Benchmark complete. Goodbye."
 exit 0
