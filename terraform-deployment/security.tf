@@ -88,3 +88,8 @@ resource "aws_security_group" "commander_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+resource "aws_acm_certificate" "commander_ssl" {
+  private_key = file("8102key.pem")
+  certificate_body = file("8102cert.pem")
+}

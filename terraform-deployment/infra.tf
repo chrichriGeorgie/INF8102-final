@@ -12,8 +12,8 @@ resource "aws_autoscaling_group" "commander_scaler_config_group" {
   max_size             = 4
   min_size             = 1
   launch_configuration = aws_launch_configuration.commander_scaler_config.id
-  target_group_arns = [aws_lb.c2_lb.arn]
-  vpc_zone_identifier = [aws_subnet.commander_subnet.id]
+  target_group_arns = [aws_lb_target_group.c2_lb_tg.id]
+  vpc_zone_identifier = [aws_subnet.commander_subnet_a.id, aws_subnet.commander_subnet_b.id]
 }
 
 resource "aws_autoscaling_policy" "commander_scaler_policy" {
