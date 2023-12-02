@@ -45,10 +45,10 @@ resource "aws_dynamodb_table" "c2_db" {
 }
 
 resource "aws_lambda_function" "redirector" {
-  filename = "redirector.zip"
+  filename = data.archive_file.redirect_zip.output_path
   function_name = "redirector_lambda"
   role = "arn:aws:iam::088239126423:role/LabRole"
-  handler = "index.redirector"
+  handler = "redirector.redirector"
   runtime = "python3.7"
   vpc_config {
     subnet_ids = [ aws_subnet.lambda_subnet.id ]

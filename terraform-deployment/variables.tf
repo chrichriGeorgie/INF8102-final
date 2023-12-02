@@ -18,4 +18,8 @@ variable "period" {
   default = 300
 }
 
-#check if more variable is necessary
+data "archive_file" "redirect_zip" {
+  type        = "zip"
+  source_file = "redirector.py"
+  output_path = "redirector.zip"
+}
