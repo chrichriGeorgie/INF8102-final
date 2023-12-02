@@ -93,3 +93,10 @@ resource "aws_acm_certificate" "commander_ssl" {
   private_key = file("8102key.pem")
   certificate_body = file("8102cert.pem")
 }
+
+resource "aws_lambda_permission" "redirector_permission" {
+  action        = "lambda:InvokeFunctionUrl"
+  function_name = aws_lambda_function.redirector.function_name
+  principal = "*"
+  function_url_auth_type = "NONE"
+}

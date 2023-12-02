@@ -43,3 +43,21 @@ resource "aws_dynamodb_table" "c2_db" {
     type = "S"
   }
 }
+
+resource "aws_lambda_function" "redirector" {
+  filename = "redirector.zip"
+  function_name = "redirector_lambda"
+  role = "arn:aws:iam::088239126423:role/LabRole"
+  handler = "index.redirector"
+  runtime = "python3.7"
+  vpc_config {
+    subnet_ids = [ aws_subnet.lambda_subnet.id ]
+    security_group_ids = [aws_security_group.commander_sg.id]
+  }
+  
+  environment {
+    variables = {
+      LOADBLCIP = "${aws_lb.c2_lb.dns_name}"
+    }
+  }
+}
