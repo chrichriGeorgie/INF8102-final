@@ -3,7 +3,7 @@ import socketserver
 import boto3
 import uuid
 
-dynamodb = boto3.resource('dynamodb', region_name='us-west-1')
+dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
 table_name = 'INF8102_TP_Final'
 partition_key = 'UserId'  # Specify the partition key
 

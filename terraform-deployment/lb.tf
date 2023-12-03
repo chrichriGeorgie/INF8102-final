@@ -2,7 +2,7 @@ resource "aws_lb" "c2_lb" {
   name               = "c2-lb"
   internal           = true
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.commander_sg.id]
+  security_groups    = [aws_security_group.lb_sg.id]
   subnets            = [aws_subnet.commander_subnet_a.id, aws_subnet.commander_subnet_b.id]
 }
 
