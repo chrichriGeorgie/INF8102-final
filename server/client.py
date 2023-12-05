@@ -2,15 +2,13 @@ import requests
 import os
 print("Current directory:", os.getcwd())
 
-# Using HTTPS URL
-url = 'https://changeme'
-data = {'message': 'Hello, HTTPS FINAL TEST 111'}
-
-# Correct the path to the certificate if necessary
-cert_path = '../terraform-deployment/8102cert.pem'  # Update this path if necessary
+# Using HTTP URL
+url = 'https://d5zeahzi7qqurpjc3phwqoqnli0wcsby.lambda-url.us-east-1.on.aws/'
+data = {'message': 'Data test 2'}
 
 try:
-    response = requests.post(url, json=data)#, verify=cert_path)
+    response = requests.post(url, json=data)
+    print(response)
     print(response.text)
 except requests.exceptions.SSLError as e:
     print(f"SSL Error: {e}")

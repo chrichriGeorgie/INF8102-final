@@ -1,8 +1,8 @@
-variable "application_port" {
+variable "https_port" {
    default     = 443
 }
 
-variable "docker_port" {
+variable "http_port" {
    default     = 8000
 }
 
@@ -16,6 +16,10 @@ variable "evaluation_periods" {
 
 variable "period" {
   default = 300
+}
+
+variable "key_pair" {
+  default = "aws-key" # Change depending on deployement
 }
 
 data "archive_file" "redirect_zip" {

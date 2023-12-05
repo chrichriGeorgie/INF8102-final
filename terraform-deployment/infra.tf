@@ -2,8 +2,11 @@ resource "aws_launch_configuration" "commander_scaler_config" {
   name = "commander_scaler_config"
   image_id = "ami-0fc5d935ebf8bc3bc"  # Ubuntu 22.04 LTS x86_64
   instance_type = "t2.micro" # Limitation
+  key_name = var.key_pair
   security_groups = [ aws_security_group.commander_sg.id ]
   iam_instance_profile = aws_iam_instance_profile.commander_profile.id
+  associate_public_ip_address = true
+
   user_data = templatefile("setup.sh.tftpl", {})
 }
 
@@ -51,6 +54,8 @@ resource "aws_lambda_function" "redirector" {
   role = "arn:aws:iam::088239126423:role/LabRole"
   handler = "redirector.redirector"
   runtime = "python3.7"
+  timeout = 15
+  
   vpc_config {
     subnet_ids = [ aws_subnet.lambda_subnet.id ]
     security_group_ids = [aws_security_group.redirector_sg.id]
