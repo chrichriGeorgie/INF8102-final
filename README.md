@@ -23,6 +23,9 @@ Repo pour le projet final du cours INF8102.
 * Docker
 * Bash
 
+* [![Bash][Bash]][https://www.gnu.org/software/bash/]
+
+
 ### Benchmark
 Contient les scripts utilisés afin de performer les tests d'intrusion automatique.
 Le script fait l'exécution des outils suivants:
