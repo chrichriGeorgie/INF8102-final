@@ -30,29 +30,37 @@ Le script fait l'exécution des outils suivants:
 * Masscan
 * Hydra
 * Stress-tester
-  
+Il va produire un fichier de résultat par outil. Aussi, pour Hydra, il faut fournir une liste d'utilisateurs "users.txt" et une liste de mot de passe "dict.txt". 
+
 ### Contenu du dossier server
 Contient le script et les configurations pour le serveur C2, le client (virus) et l'image Docker pour le déploiement du serveur.
 
 ### Contenu du dossier terraform-deployment
-Contient les fichiers Terraform décrivant l'infrastructure, le code Python servant à la lambda, un script Bash de déploiement sur les instances EC2 et un script Bash d'orchestration du déploiement
+Contient les fichiers Terraform décrivant l'infrastructure, le code Python servant à la lambda, un script Bash de déploiement sur les instances EC2 et un script Bash d'orchestration du déploiement. La sortie du déploiment terraform contiendra l'adresse URL de la fonction Lambda, cette adresse est nécessaire pour tester le déploiement.
 
 ### Commandes pour reproduire 
 * Installer les outils et les dépendances (voir les sections Construit Avec et Benchmark)
-#### Deploiement
+#### Déploiement
 * cd terraform-deployment
 * ./deploy.sh et suivre les instructions
+#### Test du déploiment
+* Ouvrir une fenetre bash
+* cd server
+* vim client.py
+* changer url par l'adresse de la fonction lambda
+* :wq
+* python3 client.p
 #### Expérimentation
-* Ouvrir une deuxième fenêtre bash
+* Ouvrir une fenêtre bash
 * cd benchmark
 * ./launch-benchmark.sh
 * ./http-dos-benchmark.sh
   
 ### Contact
-Jimmy Bell - jimmy.bell@polymtl.ca  
-Cédrick Gontran Nicolas - cedrick.nicolas@polymtl.ca  
-Celina Ghoraieb-Munoz - celina.ghoraieb-munoz@polymtl.ca  
-Christophe St-Georges - christophe.st-georges@polymtl.ca  
+Jimmy Bell   
+Cédrick Gontran Nicolas  
+Celina Ghoraieb-Munoz  
+Christophe St-Georges  
 
 ### Remerciements
 * [A Thousand Sails, One Harbor - C2 Infra on Azure](https://0xdarkvortex.dev/c2-infra-on-azure/)
