@@ -49,7 +49,7 @@ Contient les fichiers Terraform décrivant l'infrastructure, le code Python serv
 * vim client.py
 * changer url par l'adresse de la fonction lambda
 * :wq
-* python3 client.p
+* python3 client.py
 #### Expérimentation
 * Ouvrir une fenêtre bash
 * cd benchmark
