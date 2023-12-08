@@ -6,8 +6,9 @@
     <li><a href="#benchmark">Benchmark</a></li>
     <li><a href="#rapport">Rapport</a></li>
     <li><a href="#server">Server</a></li>
-    <li><a href="#terraform-deployment">Server</a></li>
+    <li><a href="#terraform-deployment">terraform-deployment</a></li>
     <li><a href="#contact">Contact</a></li>
+    <li><a href="#remerciements">Remerciements</a></li>
   </ol>
 </details>
 
