@@ -42,6 +42,18 @@ Cédrick Gontran Nicolas - cedrick.nicolas@polymtl.ca
 Celina Ghoraieb-Munoz - celina.ghoraieb-munoz@polymtl.ca  
 Christophe St-Georges - christophe.st-georges@polymtl.ca  
 
+### Étapes de reproduction
+
+*Installer les outils et les dépendances (voir la section Construit Avec)
+** Deploiement
+* cd terraform-deployment
+* ./deploy.sh et suivre les instructions
+* Expérimentation
+* Ouvrir une deuxième fenêtre bash
+* cd benchmark
+* ./launch-benchmark.sh
+* ./http-dos-benchmark.sh
+
 ### Remerciements
 * [A Thousand Sails, One Harbor - C2 Infra on Azure](https://0xdarkvortex.dev/c2-infra-on-azure/)
 
