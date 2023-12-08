@@ -1,6 +1,6 @@
-<!-- TABLE OF CONTENTS -->
+<!-- TABLE DES MATIÈRES-->
 <details>
-  <summary>Table of Contents</summary>
+  <summary>Table des matières</summary>
   <ol>
     <li><a href="#construit avec">Construit avec</a></li>
     <li><a href="#benchmark">Benchmark</a></li>
