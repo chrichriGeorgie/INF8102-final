@@ -32,6 +32,9 @@ Le script fait l'exécution des outils suivants:
 * Stress-tester
   
 ### Rapport
+Contien le fichier LaTex du rapport du projet final du cours INF8102.
+* Rapport final.txt
+  
 ### Server
 ### terraform-deployment
 ### Contact
