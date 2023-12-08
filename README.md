@@ -44,8 +44,8 @@ Christophe St-Georges - christophe.st-georges@polymtl.ca
 
 ### Étapes de reproduction
 
-*Installer les outils et les dépendances (voir la section Construit Avec)
-  *Deploiement
+* Installer les outils et les dépendances (voir la section Construit Avec)
+  * Deploiement
 * cd terraform-deployment
 * ./deploy.sh et suivre les instructions
 * Expérimentation
