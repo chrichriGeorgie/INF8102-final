@@ -24,6 +24,13 @@ Repo pour le projet final du cours INF8102.
 * Bash
 
 ### Benchmark
+Contient les scripts utilisés afin de performer les tests d'intrusion automatique.
+Le script fait l'exécution des outils suivants:
+* nmap
+* Masscan
+* Hydra
+* Stress-tester
+  
 ### Rapport
 ### Server
 ### terraform-deployment
