@@ -21,6 +21,7 @@ Repo pour le projet final du cours INF8102.
 * Terraform
 * DynamoDB
 * Docker
+* Bash
 
 ### Benchmark
 ### Rapport
