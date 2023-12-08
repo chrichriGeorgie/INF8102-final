@@ -3,9 +3,9 @@
   <summary>Table des matières</summary>
   <ol>
     <li><a href="#construit avec">Construit avec</a></li>
-    <li><a href="#benchmark">Benchmark</a></li>
-    <li><a href="#server">Server</a></li>
-    <li><a href="#terraform-deployment">terraform-deployment</a></li>
+    <li><a href="#contenu du dossier benchmark">Contenu du dossier benchmark</a></li>
+    <li><a href="#Contenu du dossier server">Contenu du dossier server</a></li>
+    <li><a href="#contenu du dossier terraform-deployment">Contenu du dossier terraform-deployment</a></li>
     <li><a href="#commandes pour reproduire">Commandes pour reproduire</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#remerciements">Remerciements</a></li>
@@ -23,7 +23,7 @@ Repo pour le projet final du cours INF8102.
 * Docker
 * Bash
 
-### Benchmark
+### Contenu du dossier benchmark
 Contient les scripts utilisés afin de performer les tests d'intrusion automatique.
 Le script fait l'exécution des outils suivants:
 * nmap
@@ -31,13 +31,13 @@ Le script fait l'exécution des outils suivants:
 * Hydra
 * Stress-tester
   
-### Server
+### Contenu du dossier server
 Contient le script et les configurations pour le serveur C2, le client (virus) et l'image Docker pour le déploiement du serveur.
 
-### terraform-deployment
+### Contenu du dossier terraform-deployment
 Contient les fichiers Terraform décrivant l'infrastructure, le code Python servant à la lambda, un script Bash de déploiement sur les instances EC2 et un script Bash d'orchestration du déploiement
 
-### Commandes pour reproduire
+### Commandes pour reproduire 
 * Installer les outils et les dépendances (voir les sections Construit Avec et Benchmark)
 #### Deploiement
 * cd terraform-deployment
