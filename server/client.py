@@ -3,7 +3,7 @@ import os
 print("Current directory:", os.getcwd())
 
 # Using HTTP URL
-url = 'https://d5zeahzi7qqurpjc3phwqoqnli0wcsby.lambda-url.us-east-1.on.aws/'
+url = 'https://changeme'
 data = {'message': 'Data test 2'}
 
 try:
