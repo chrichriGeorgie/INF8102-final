@@ -20,13 +20,16 @@ Repo pour le projet final du cours INF8102.
 * Terraform
 * DynamoDB
 
-## Benchmark
-## Rapport
-## Server
-## terraform-deployment
-## Contact
+### Benchmark
+### Rapport
+### Server
+### terraform-deployment
+### Contact
 Jimmy Bell - jimmy.bell@polymtl.ca  
 Cédrick Gontran Nicolas - cedrick.nicolas@polymtl.ca  
 Celina Ghoraieb-Munoz - celina.ghoraieb-munoz@polymtl.ca  
 Christophe St-Georges - christophe.st-georges@polymtl.ca  
+
+### Remerciements
+* [A Thousand Sails, One Harbor - C2 Infra on Azure](https://0xdarkvortex.dev/c2-infra-on-azure/)
 
