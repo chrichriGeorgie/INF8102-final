@@ -2,6 +2,7 @@
 <details>
   <summary>Table of Contents</summary>
   <ol>
+    <li><a href="#construit avec">Construit avec</a></li>
     <li><a href="#benchmark">Benchmark</a></li>
     <li><a href="#rapport">Rapport</a></li>
     <li><a href="#server">Server</a></li>
@@ -12,6 +13,12 @@
 
 # INF8102-final
 Repo pour le projet final du cours INF8102.
+
+## Construit avec
+* AWS
+* Python
+* Terraform
+* DynamoDB
 
 ## Benchmark
 ## Rapport
